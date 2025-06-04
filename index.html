@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Complete Schilder Calculatie</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f8fafc;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      width: 100%;
+      margin-top: 20px;
+      padding: 12px;
+      background: #007acc;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #005fa3;
+    }
+    .result {
+      margin-top: 25px;
+      padding: 15px;
+      background: #e6f4ff;
+      border-radius: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Complete Schilder Calculatie</h2>
+
+    <label>Oppervlakte (m²):</label>
+    <input type="number" id="vierkanteMeters" step="0.01">
+
+    <label>Prijs per m² (€):</label>
+    <input type="number" id="prijsPerM2" step="0.01">
+
+    <label>Strekkende meters (m¹):</label>
+    <input type="number" id="strekkendeMeters" step="0.01">
+
+    <label>Prijs per m¹ (€):</label>
+    <input type="number" id="prijsPerM1" step="0.01">
+
+    <label>Materiaalkosten (€):</label>
+    <input type="number" id="materiaal" step="0.01">
+
+    <label>Voorrijkosten (€):</label>
+    <input type="number" id="voorrij" step="0.01">
+
+    <label>BTW (%):</label>
+    <select id="btw">
+      <option value="0">Geen</option>
+      <option value="9">9%</option>
+      <option value="21">21%</option>
+    </select>
+
+    <button onclick="bereken()">Bereken Offerte</button>
+
+    <div class="result" id="resultaat" style="display: none;"></div>
+  </div>
+
+  <script>
+    function bereken() {
+      const m2 = parseFloat(document.getElementById("vierkanteMeters").value) || 0;
+      const prijsM2 = parseFloat(document.getElementById("prijsPerM2").value) || 0;
+      const m1 = parseFloat(document.getElementById("strekkendeMeters").value) || 0;
+      const prijsM1 = parseFloat(document.getElementById("prijsPerM1").value) || 0;
+      const materiaal = parseFloat(document.getElementById("materiaal").value) || 0;
+      const voorrij = parseFloat(document.getElementById("voorrij").value) || 0;
+      const btwPercentage = parseFloat(document.getElementById("btw").value);
+
+      const arbeidskostenM2 = m2 * prijsM2;
+      const arbeidskostenM1 = m1 * prijsM1;
+      const subtotaal = arbeidskostenM2 + arbeidskostenM1 + materiaal + voorrij;
+      const btw = subtotaal * (btwPercentage / 100);
+      const totaal = subtotaal + btw;
+
+      document.getElementById("resultaat").innerHTML = `
+        <strong>Offerte Overzicht:</strong><br>
+        - Arbeidskosten (m²): €${arbeidskostenM2.toFixed(2)}<br>
+        - Arbeidskosten (m¹): €${arbeidskostenM1.toFixed(2)}<br>
+        - Materiaalkosten: €${materiaal.toFixed(2)}<br>
+        - Voorrijkosten: €${voorrij.toFixed(2)}<br>
+        - Subtotaal: €${subtotaal.toFixed(2)}<br>
+        - BTW (${btwPercentage}%): €${btw.toFixed(2)}<br>
+        <strong>TOTAAL: €${totaal.toFixed(2)}</strong>
+      `;
+      document.getElementById("resultaat").style.display = "block";
+    }
+  </script>
+</body>
+</html>
